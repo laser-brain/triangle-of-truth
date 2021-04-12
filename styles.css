@@ -1,0 +1,21 @@
+.canvas {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align:center;
+  border: 1px solid black;  
+}
+
+
+.circle, .triangle {
+  stroke: black;
+  stroke-width: 1;
+}
+
+.triangle {
+  fill: transparent;
+}
+
+.circle {
+  fill: black;
+}

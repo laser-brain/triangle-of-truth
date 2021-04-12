@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Triangle of truth!</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+
+<body>
+  <div class="legend">
+    <span id="handle-x">0</span>
+    <span id="handle-y">0</span>
+  </div>
+  <div class="canvas">
+    <svg id="svg-root" width="1000" height="800">
+      <polygon id="tr-bottom" class="triangle" />
+      <polygon id="tr-left" class="triangle" />
+      <polygon id="tr-right" class="triangle" points="" />
+      <circle id="handle" class="circle" draggable="true" />
+      Sorry, your browser does not support inline SVG.
+    </svg>
+  </div>
+  <script src="./drag.js"></script>
+  <script>
+    const svg = document.querySelector('#svg-root')
+    const width = parseInt(svg.getAttribute('width'));
+    const height = parseInt(svg.getAttribute('height'));
+
+    const posCenter = { x: width / 2, y: height / 2 * 1.2 };
+    const posTop = { x: width / 2, y: height / 20 * 1.2};
+    const posLeft = { x: 0, y: height - height / 10};
+    const posRight = { x: width, y: height - height / 10};
+
+    document.querySelectorAll('.triangle').forEach((triangle) => {
+      switch(triangle.id) {
+        case 'tr-left':
+          triangle.setAttribute('points', `${posCenter.x}, ${posCenter.y} ${posTop.x}, ${posTop.y} ${posLeft.x}, ${posLeft.y}`);
+          break;
+        case 'tr-right':
+          triangle.setAttribute('points', `${posCenter.x}, ${posCenter.y} ${posTop.x}, ${posTop.y} ${posRight.x}, ${posRight.y}`);
+          break;
+        case 'tr-bottom':
+          triangle.setAttribute('points', `${posCenter.x}, ${posCenter.y} ${posRight.x}, ${posRight.y} ${posLeft.x}, ${posLeft.y}`);
+          break;
+      }
+    });
+
+    const handle = document.querySelector('#handle')
+    handle.setAttribute('cx', posCenter.x);
+    handle.setAttribute('cy', posCenter.y);
+    handle.setAttribute('r', Math.min(width, height) / 200);
+
+    makeDraggable(document.querySelector('#handle'));
+  </script>
+</body>
+
+</html>

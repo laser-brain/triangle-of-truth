@@ -5,7 +5,7 @@
     :cx="circle.x"
     :cy="circle.y"
     :r="circle.r"
-    v-on="{ mousedown: startMove, mouseup: finishMove, mousemove: handleMove }"
+    v-on="{ mousedown: startMove, mouseup: finishMove }"
   />
 </template>
 
@@ -53,10 +53,7 @@ export default {
         return;
       }
       const point = inElementSpace(evt);
-      xlate.setTranslate(
-        txStartX + point.x - mouseStart.x,
-        txStartY + point.y - mouseStart.y,
-      );
+      xlate.setTranslate(txStartX + point.x - mouseStart.x, txStartY + point.y - mouseStart.y);
 
       document.querySelectorAll('.triangle').forEach((triangle) => {
         const coords = triangle
@@ -79,6 +76,7 @@ export default {
       pt = tmp.createSVGPoint();
 
       svg.value = tmp;
+      svg.value.addEventListener('mousemove', handleMove);
     });
 
     // const pt = props.svg.createSVGPoint();

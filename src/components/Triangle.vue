@@ -1,10 +1,13 @@
 <template>
   <div class="canvas">
     <svg :width="props.width" :height="props.height">
-      <polygon class="triangle" :points="pointsTriangleLeft" />
-      <polygon class="triangle" :points="pointsTriangleRight" />
-      <polygon class="triangle" :points="pointsTriangleBottom" />
-      <DragHandle :circle="circle" :svg="svg"  />
+      <polygon class="triangle blue" :points="pointsTriangleLeft" />
+      <polygon class="triangle yellow" :points="pointsTriangleRight" />
+      <polygon class="triangle black" :points="pointsTriangleBottom" />
+      <DragHandle :circle="circle" />
+      <text x="210" y="360" fill="white">Time</text>
+      <text x="740" y="360" fill="white">Quality</text>
+      <text x="478" y="745" fill="white">Cost</text>
       Sorry, your browser does not support inline SVG.
     </svg>
   </div>
@@ -35,7 +38,7 @@ export default {
     const circle = {
       x: posCenter.x,
       y: posCenter.y,
-      r: Math.min(props.width, props.height) / 200,
+      r: Math.min(props.width, props.height) / 150,
     };
 
     return {
@@ -55,20 +58,25 @@ export default {
   justify-content: center;
   align-items: center;
   text-align: center;
-  border: 1px solid black;
 
-  .circle,
-  .triangle {
-    stroke: black;
-    stroke-width: 1;
+  text {
+    font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+    font-weight: bold;
+    font-size: 2vmin;
   }
 
-  .triangle {
-    fill: transparent;
-  }
+  polygon {
+    stroke-width: 4;
 
-  .circle {
-    fill: black;
+    &.black {
+      fill: black;
+    }
+    &.blue {
+      fill: blue;
+    }
+    &.yellow {
+      fill: yellow;
+    }
   }
 }
 </style>

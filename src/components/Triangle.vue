@@ -1,17 +1,16 @@
 <template>
   <div class="canvas">
-    <svg ref="svg" :width="props.width" :height="props.height">
+    <svg :width="props.width" :height="props.height">
       <polygon class="triangle" :points="pointsTriangleLeft" />
       <polygon class="triangle" :points="pointsTriangleRight" />
       <polygon class="triangle" :points="pointsTriangleBottom" />
-      <DragHandle :circle="circle"  />
+      <DragHandle :circle="circle" :svg="svg"  />
       Sorry, your browser does not support inline SVG.
     </svg>
   </div>
 </template>
 
 <script>
-import { ref } from 'vue';
 import DragHandle from './DragHandle.vue';
 
 export default {
@@ -24,8 +23,6 @@ export default {
     width: Number,
   },
   setup(props) {
-    const svg = ref(null);
-    console.log(props);
     const posCenter = { x: props.width / 2, y: (props.height / 2) * 1.2 };
     const posTop = { x: props.width / 2, y: (props.height / 20) * 1.2 };
     const posLeft = { x: 0, y: props.height - props.height / 10 };
@@ -46,7 +43,6 @@ export default {
       pointsTriangleRight,
       pointsTriangleBottom,
       circle,
-      svg,
       props,
     };
   },

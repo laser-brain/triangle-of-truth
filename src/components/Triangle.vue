@@ -31,7 +31,6 @@ export default {
   },
   setup(props) {
     const posCenter = { x: props.width / 2, y: (props.height / 2) * 1.25 };
-    console.log(posCenter);
     const posTop = { x: props.width / 2, y: (props.height / 20) * 1.5 };
     const posLeft = { x: 0, y: props.height - props.height / 10 };
     const posRight = { x: props.width, y: props.height - props.height / 10 };

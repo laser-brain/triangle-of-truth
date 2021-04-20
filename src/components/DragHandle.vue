@@ -12,6 +12,7 @@
 
 <script>
 import { ref, onMounted } from 'vue';
+import state from '../state';
 
 export default {
   name: 'DragHandle',
@@ -65,7 +66,13 @@ export default {
         coords[0] = `${point.x},${point.y}`;
         triangle.setAttribute('points', coords.join(' '));
       });
+      if (point === undefined) {
+        console.log('undefined');
+      } else {
+        state.moveCenter(point);
+      }
     };
+
     const finishMove = () => {
       drag = false;
     };

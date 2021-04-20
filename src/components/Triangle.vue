@@ -1,20 +1,24 @@
 <template>
   <div class="canvas">
     <svg :width="props.width" :height="props.height">
-      <polygon class="triangle blue" :points="pointsTriangleLeft" />
-      <polygon class="triangle yellow" :points="pointsTriangleRight" />
-      <polygon class="triangle black" :points="pointsTriangleBottom" />
+      <polygon class="triangle tr-time" :points="pointsTriangleLeft" />
+      <polygon class="triangle tr-quality" :points="pointsTriangleRight" />
+      <polygon class="triangle tr-cost" :points="pointsTriangleBottom" />
       <DragHandle :circle="circle" />
-      <text x="210" y="360" fill="white">Time</text>
-      <text x="740" y="360" fill="white">Quality</text>
-      <text x="478" y="745" fill="white">Cost</text>
+      <text id="time-label" x="210" y="360" fill="white">{{ timeLabel }}</text>
+      <text id="quality-label" x="740" y="360" fill="white">
+        {{ qualityLabel }}
+      </text>
+      <text id="cost-label" x="478" y="745" fill="white">{{ costLabel }}</text>
       Sorry, your browser does not support inline SVG.
     </svg>
   </div>
 </template>
 
 <script>
+import { computed } from 'vue';
 import DragHandle from './DragHandle.vue';
+import state from '../state';
 
 export default {
   name: 'Triangle',
@@ -26,14 +30,48 @@ export default {
     width: Number,
   },
   setup(props) {
-    const posCenter = { x: props.width / 2, y: (props.height / 2) * 1.2 };
-    const posTop = { x: props.width / 2, y: (props.height / 20) * 1.2 };
+    const posCenter = { x: props.width / 2, y: (props.height / 2) * 1.25 };
+    console.log(posCenter);
+    const posTop = { x: props.width / 2, y: (props.height / 20) * 1.5 };
     const posLeft = { x: 0, y: props.height - props.height / 10 };
     const posRight = { x: props.width, y: props.height - props.height / 10 };
 
-    const pointsTriangleLeft = `${posCenter.x}, ${posCenter.y} ${posTop.x}, ${posTop.y} ${posLeft.x}, ${posLeft.y}`;
-    const pointsTriangleRight = `${posCenter.x}, ${posCenter.y} ${posTop.x}, ${posTop.y} ${posRight.x}, ${posRight.y}`;
-    const pointsTriangleBottom = `${posCenter.x}, ${posCenter.y} ${posRight.x}, ${posRight.y} ${posLeft.x}, ${posLeft.y}`;
+    state.init(posCenter, posTop, posLeft, posRight);
+
+    const pointsTriangleLeft = computed(
+      () => `${state.state.posCenter.x}, ${state.state.posCenter.y} ${state.state.posTop.x}, ${state.state.posTop.y} ${state.state.posLeft.x}, ${state.state.posLeft.y}`,
+    );
+    const pointsTriangleRight = computed(
+      () => `${state.state.posCenter.x}, ${state.state.posCenter.y} ${state.state.posTop.x}, ${state.state.posTop.y} ${state.state.posRight.x}, ${state.state.posRight.y}`,
+    );
+    const pointsTriangleBottom = computed(
+      () => `${state.state.posCenter.x}, ${state.state.posCenter.y} ${state.state.posRight.x}, ${state.state.posRight.y} ${state.state.posLeft.x}, ${state.state.posLeft.y}`,
+    );
+
+    const calcArea = (p1, p2, p3) => {
+      const tmp = p1.x * (p2.y - p3.y) + p2.x * (p3.y - p1.y) + p3.x * (p1.y - p2.y);
+      return (tmp > 0 ? tmp : tmp * -1) / 2;
+    };
+
+    const timeArea = computed(
+      () => calcArea(state.state.posLeft, state.state.posTop, state.state.posCenter),
+    );
+    const qualityArea = computed(
+      () => calcArea(state.state.posRight, state.state.posTop, state.state.posCenter),
+    );
+    const costArea = computed(
+      () => calcArea(state.state.posRight, state.state.posLeft, state.state.posCenter),
+    );
+
+    const totalArea = computed(() => timeArea.value + costArea.value + qualityArea.value);
+    const calcPercentage = (fraction) => {
+      const percentage = (fraction.value / totalArea.value) * 100;
+      return `${percentage.toFixed(0)}%`;
+    };
+
+    const timeLabel = computed(() => `Time (${calcPercentage(timeArea)})`);
+    const qualityLabel = computed(() => `Quality (${calcPercentage(qualityArea)})`);
+    const costLabel = computed(() => `Cost (${calcPercentage(costArea)})`);
 
     const circle = {
       x: posCenter.x,
@@ -47,6 +85,9 @@ export default {
       pointsTriangleBottom,
       circle,
       props,
+      timeLabel,
+      qualityLabel,
+      costLabel,
     };
   },
 };
@@ -68,13 +109,13 @@ export default {
   polygon {
     stroke-width: 4;
 
-    &.black {
+    &.tr-cost {
       fill: black;
     }
-    &.blue {
+    &.tr-time {
       fill: blue;
     }
-    &.yellow {
+    &.tr-quality {
       fill: yellow;
     }
   }

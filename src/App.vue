@@ -2,15 +2,16 @@
   <Triangle :height="800" :width="1000"/>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
 import Triangle from './components/Triangle.vue';
 
-export default {
+export default defineComponent({
   name: 'App',
   components: {
     Triangle,
   },
-};
+});
 </script>
 
 <style lang="css">

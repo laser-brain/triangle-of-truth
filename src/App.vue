@@ -7,7 +7,7 @@ import { defineComponent } from 'vue';
 import Triangle from './components/Triangle.vue';
 
 export default defineComponent({
-  name: 'App',
+  name: 'Triangle of truth',
   components: {
     Triangle,
   },
@@ -16,6 +16,8 @@ export default defineComponent({
 
 <style lang="css">
 body {
-  background-image: linear-gradient(black, green);
+  margin: 0;
+  min-height: 100vh;
+  background-image: linear-gradient(black, #7da3a1);
 }
 </style>

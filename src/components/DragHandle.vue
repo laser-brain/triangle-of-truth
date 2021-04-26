@@ -98,11 +98,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$color: "red";
+$color: "white";
 
-.circle {
+circle {
+  cursor: pointer;
   stroke: $color;
-  stroke-width: 4;
+  stroke-width: 1;
   fill: $color;
 }
 </style>

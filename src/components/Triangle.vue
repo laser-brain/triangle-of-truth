@@ -5,7 +5,7 @@
       <polygon class="triangle tr-quality" :points="pointsTriangleRight" />
       <polygon class="triangle tr-cost" :points="pointsTriangleBottom" />
       <DragHandle :circle="circle" />
-      <text id="time-label" x="210" y="360" fill="white">{{ timeLabel }}</text>
+      <text id="time-label" x="140" y="360" fill="white">{{ timeLabel }}</text>
       <text id="quality-label" x="740" y="360" fill="white">
         {{ qualityLabel }}
       </text>
@@ -75,7 +75,7 @@ export default {
     const circle = {
       x: posCenter.x,
       y: posCenter.y,
-      r: Math.min(props.width, props.height) / 150,
+      r: Math.min(props.width, props.height) / 300,
     };
 
     return {
@@ -109,13 +109,13 @@ export default {
     stroke-width: 4;
 
     &.tr-cost {
-      fill: black;
+      fill: #324851;
     }
     &.tr-time {
-      fill: blue;
+      fill: #34675c;
     }
     &.tr-quality {
-      fill: yellow;
+      fill: #7da3a1;
     }
   }
 }

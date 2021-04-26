@@ -57,15 +57,6 @@ export default {
       const point = inElementSpace(evt);
       xlate.setTranslate(txStartX + point.x - mouseStart.x, txStartY + point.y - mouseStart.y);
 
-      document.querySelectorAll('.triangle').forEach((triangle) => {
-        const coords = triangle
-          .getAttribute('points')
-          .replace(' ,', ',')
-          .replace(', ', ',')
-          .split(' ');
-        coords[0] = `${point.x},${point.y}`;
-        triangle.setAttribute('points', coords.join(' '));
-      });
       if (point === undefined) {
         console.log('undefined');
       } else {
@@ -84,7 +75,7 @@ export default {
       pt = tmp.createSVGPoint();
 
       svg.value = tmp;
-      svg.value.addEventListener('mousemove', handleMove);
+      document.querySelectorAll('.handle-move').forEach((node) => node.addEventListener('mousemove', handleMove));
     });
 
     return {

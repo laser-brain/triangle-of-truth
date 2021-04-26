@@ -1,14 +1,12 @@
 <template>
   <div class="canvas">
     <svg :width="props.width" :height="props.height">
-      <polygon class="triangle tr-time" :points="pointsTriangleLeft" />
-      <polygon class="triangle tr-quality" :points="pointsTriangleRight" />
-      <polygon class="triangle tr-cost" :points="pointsTriangleBottom" />
+      <polygon class="triangle handle-move tr-time" :points="pointsTriangleLeft" />
+      <polygon class="triangle handle-move tr-quality" :points="pointsTriangleRight" />
+      <polygon class="triangle handle-move tr-cost" :points="pointsTriangleBottom" />
       <DragHandle :circle="circle" />
       <text id="time-label" x="140" y="360" fill="white">{{ timeLabel }}</text>
-      <text id="quality-label" x="740" y="360" fill="white">
-        {{ qualityLabel }}
-      </text>
+      <text id="quality-label" x="740" y="360" fill="white"> {{ qualityLabel }} </text>
       <text id="cost-label" x="478" y="745" fill="white">{{ costLabel }}</text>
       Sorry, your browser does not support inline SVG.
     </svg>

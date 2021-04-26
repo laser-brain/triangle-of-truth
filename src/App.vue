@@ -18,6 +18,7 @@ export default defineComponent({
 body {
   margin: 0;
   min-height: 100vh;
-  background-image: linear-gradient(black, #7da3a1);
+  background-image: linear-gradient(225deg, #7da3a1, black);
 }
+
 </style>

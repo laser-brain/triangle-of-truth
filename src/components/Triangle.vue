@@ -1,37 +1,70 @@
 <template>
   <div class="canvas">
     <svg :width="props.width" :height="props.height">
-      <polygon class="triangle handle-move tr-time" :points="pointsTriangleLeft" />
-      <polygon class="triangle handle-move tr-quality" :points="pointsTriangleRight" />
-      <polygon class="triangle handle-move tr-cost" :points="pointsTriangleBottom" />
+      <polygon
+        class="triangle handle-move tr-time"
+        :points="pointsTriangleLeft"
+      />
+      <polygon
+        class="triangle handle-move tr-quality"
+        :points="pointsTriangleRight"
+      />
+      <polygon
+        class="triangle handle-move tr-cost"
+        :points="pointsTriangleBottom"
+      />
       <DragHandle :circle="circle" />
       <text id="time-label" x="140" y="360" fill="white">{{ timeLabel }}</text>
-      <text id="quality-label" x="740" y="360" fill="white"> {{ qualityLabel }} </text>
+      <text id="quality-label" x="740" y="360" fill="white">
+        {{ qualityLabel }}
+      </text>
       <text id="cost-label" x="478" y="745" fill="white">{{ costLabel }}</text>
       Sorry, your browser does not support inline SVG.
     </svg>
   </div>
 </template>
 
-<script>
-import { computed } from 'vue';
+<script lang="ts">
+import {
+  defineComponent, computed, Ref, PropType,
+} from 'vue';
 import DragHandle from './DragHandle.vue';
 import state from '../state';
 
-export default {
+interface ITriangleProps {
+  height: number;
+  width: number;
+}
+
+interface ICoordinate {
+  x: number;
+  y: number;
+}
+
+export default defineComponent({
   name: 'Triangle',
   components: {
     DragHandle,
   },
   props: {
+    type: Object as PropType<ITriangleProps>,
     height: Number,
     width: Number,
   },
   setup(props) {
-    const posCenter = { x: props.width / 2, y: (props.height / 2) * 1.25 };
+    if (props.height === undefined || props.width === undefined) {
+      throw new Error('missing value(s) for height and/or width');
+    }
+
+    const posCenter: ICoordinate = {
+      x: props.width / 2,
+      y: (props.height / 2) * 1.25,
+    };
     const posTop = { x: props.width / 2, y: (props.height / 20) * 1.5 };
     const posLeft = { x: 0, y: props.height - props.height / 10 };
     const posRight = { x: props.width, y: props.height - props.height / 10 };
+
+    const posCostLabel: ICoordinate = { x: 0, y: 0 };
 
     state.init(posCenter, posTop, posLeft, posRight);
 
@@ -45,7 +78,7 @@ export default {
       () => `${state.state.posCenter.x}, ${state.state.posCenter.y} ${state.state.posRight.x}, ${state.state.posRight.y} ${state.state.posLeft.x}, ${state.state.posLeft.y}`,
     );
 
-    const calcArea = (p1, p2, p3) => {
+    const calcArea = (p1: ICoordinate, p2: ICoordinate, p3: ICoordinate) => {
       const tmp = p1.x * (p2.y - p3.y) + p2.x * (p3.y - p1.y) + p3.x * (p1.y - p2.y);
       return (tmp > 0 ? tmp : tmp * -1) / 2;
     };
@@ -60,14 +93,18 @@ export default {
       () => calcArea(state.state.posRight, state.state.posLeft, state.state.posCenter),
     );
 
-    const totalArea = computed(() => timeArea.value + costArea.value + qualityArea.value);
-    const calcPercentage = (fraction) => {
+    const totalArea = computed(
+      () => timeArea.value + costArea.value + qualityArea.value,
+    );
+    const calcPercentage = (fraction: Ref<number>) => {
       const percentage = (fraction.value / totalArea.value) * 100;
       return `${percentage.toFixed(0)}%`;
     };
 
     const timeLabel = computed(() => `Time (${calcPercentage(timeArea)})`);
-    const qualityLabel = computed(() => `Quality (${calcPercentage(qualityArea)})`);
+    const qualityLabel = computed(
+      () => `Quality (${calcPercentage(qualityArea)})`,
+    );
     const costLabel = computed(() => `Cost (${calcPercentage(costArea)})`);
 
     const circle = {
@@ -85,9 +122,10 @@ export default {
       timeLabel,
       qualityLabel,
       costLabel,
+      posCostLabel,
     };
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>
